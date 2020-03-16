@@ -1,0 +1,13 @@
+$json[]=['currency b','a.target_currency_id=b.id','left'];
+       $where=['type'=>$type,'is_show'=>CommonEnum::$show];
+       $field=['a.id','a.target_currency_id','b.currency'];
+        $data=$this->configMoneyData->relationByWhere($json,$where,$field)->toArray();
+
+this->alias('a')->join($join)->where($where)->field($fields)->group($group)->order($orderRule)->select();
+//连表分页查询
+$this->alias('a')->join($join)->where($where)->field($fields)->group($group)->order($orderRule)->page($pageindex,$pagesize)->select();
+连表分组、排序统计
+$this->alias('a')->join($join)->where($where)->field($fields)->group($group)->order($orderRule)->count();
+
+分组排序统计
+$this->where($where)->field($fields)->group($group)->order($orderRule)->count()

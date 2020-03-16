@@ -1,0 +1,15 @@
+
+https://blog.csdn.net/u011415782/article/details/79100191
+//TODO 自定义异常请求码的页面配置 建议只做非500错误页面
+  
+  'http_exception_template'    =>
+     
+  [
+            404 =>  Env::get('app_path') . 'index/view/exception_html/404.html',
+            500 =>  Env::get('app_path') . 'index/view/exception_html/500.html',
+        ],
+--------------------- 
+作者：moTzxx 
+来源：CSDN 
+原文：https://blog.csdn.net/u011415782/article/details/79100191 
+版权声明：本文为博主原创文章，转载请附上博文链接！

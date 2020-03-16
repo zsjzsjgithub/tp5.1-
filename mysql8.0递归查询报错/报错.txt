@@ -1,0 +1,2 @@
+1将XXXLogic.php中的查询字段中的 'member' 改为 '`member`';  
+ 2.修改AtlasLogic中的 'member'  改为  '`member`'

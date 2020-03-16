@@ -1,0 +1,4 @@
+数组中所有中文在json_encode之后都不见了或者出现\u2353等。
+
+解决方法是用urlencode()函数处理以下，在json_encode之前，把所有数组内所有内容都用urlencode()处理一下，然用json_encode()转换成json字符串，最后再用urldecode()将编码过的中文转回来。
+

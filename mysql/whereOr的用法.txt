@@ -1,0 +1,12 @@
+ //uid=0是群消息 uid=$uid是系统发给某个用户的消息
+$whereOr = [
+            ['uid','=',0],
+            ['is_del','=',CommonEnum::$undeleted]
+        ];
+        $whereOr1 = [
+            ['uid','=',$uid],
+            ['is_del','=',CommonEnum::$undeleted]
+        ];
+$whereOrs=[$whereOr,$whereOr1];
+$field = ['id', 'title', 'content', 'create_time', 'uid'];
+        $noticeData = $this->adminNoticeData->whereOr($whereOrs)->order(['id desc'])->field($field)->select();

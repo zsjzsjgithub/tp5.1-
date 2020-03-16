@@ -1,0 +1,28 @@
+http://www.php.cn/manual/view/33123.html
+
+常量调整
+5.1取消了所有的框架内置常量（不影响应用代码中的自定义常量），如需获取，请使用think\facade\App类的内置方法以及think\facade\Env类获取，下面给出的是5.0和5.1的常量对照表：
+5.0常量	5.1获取方法
+EXT	取消，固定使用 .php
+IS_WIN	取消
+IS_CLI	取消
+DS	使用PHP自带 DIRECTORY_SEPARATOR
+ENV_PREFIX	取消，固定使用PHP_
+THINK_START_TIME	App::getBeginTime()
+THINK_START_MEM	App::getBeginMem()
+THINK_VERSION	App::version()
+THINK_PATH	Env::get('think_path')
+LIB_PATH	Env::get('think_path') . 'library/'
+CORE_PATH	Env::get('think_path') . 'library/think/'
+APP_PATH	Env::get('app_path')
+CONFIG_PATH	Env::get('config_path')
+CONFIG_EXT	App::getConfigExt()
+ROOT_PATH	Env::get('root_path')
+EXTEND_PATH	Env::get('root_path') . 'extend/'
+VENDOR_PATH	Env::get('root_path') . 'vendor/'
+RUNTIME_PATH	Env::get('runtime_path')
+LOG_PATH	Env::get('runtime_path') . 'log/'
+CACHE_PATH	Env::get('runtime_path') . 'cache/'
+TEMP_PATH	Env::get('runtime_path'). 'temp/'
+MODULE_PATH	Env::get('module_path')
+通过Env类的get方法获取路径变量的时候不区分大小写，例如下面的写法是等效的：

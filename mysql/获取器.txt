@@ -1,0 +1,5 @@
+
+查询user表中的用户信息，此时user表的rank_id需要连表rank，只需要在user模型中写如下方法
+public function getRankIdAttr($value){
+    return ((new Rank())->where(['id'=>$value])->value('name'));
+}

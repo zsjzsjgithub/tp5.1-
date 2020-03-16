@@ -1,0 +1,6 @@
+在Unix和类Unix的操作系统之中，crontab命令常用于设置周期性被执行的指令，也可以理解为设置定时任务。
+
+crontab中的定时任务有时候没有成功执行，什么原因呢？这时就需要去日志里去分析一下了，那该如何查看crontab的日志记录呢？
+
+1. linux
+看 /var/log/cron.log这个文件就可以，可以用tail -f /var/log/cron.log观察

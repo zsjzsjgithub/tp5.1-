@@ -1,0 +1,57 @@
+server
+    {
+        listen 80;
+        #listen [::]:80;
+        server_name muj.flcs88.com ;
+       rewrite ^(.*)$ https://$host$1 permanent;
+        index index.html index.htm index.php default.html default.htm default.php;
+        root  /home/wwwroot/muj.flcs88.com;
+
+        include rewrite/other.conf;
+        #error_page   404   /404.html;
+
+        # Deny access to PHP files in specific directory
+        #location ~ /(wp-content|uploads|wp-includes|images)/.*\.php$ { deny all; }
+
+        include enable-php-pathinfo.conf;
+
+        location ~ .*\.(gif|jpg|jpeg|png|bmp|swf)$
+        {
+            expires      30d;
+        }
+
+        location ~ .*\.(js|css)?$
+        {
+            expires      12h;
+        }
+
+        location ~ /.well-known {
+            allow all;
+        }
+
+        location ~ /\.
+        {
+            deny all;
+        }
+
+        access_log  /home/wwwlogs/muj.flcs88.com.log;
+    }
+    server {
+listen 443;
+server_name muj.flcs88.com;
+ssl on;
+include rewrite/other.conf;
+
+include enable-php-pathinfo.conf;
+root /home/wwwroot/muj.flcs88.com;
+index index.html index.htm;
+ssl_certificate /usr/local/nginx/cert/2702183_muj.flcs88.com.pem;   #将domain name.pem替换成您证书的文件名。
+ssl_certificate_key /usr/local/nginx/cert/2702183_muj.flcs88.com.key;   #将domain name.key替换成您证书的密钥文件名。
+ssl_session_timeout 5m;
+ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4;
+ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+ssl_prefer_server_ciphers on;
+location / {
+index index.html index.htm index.php;
+}
+}

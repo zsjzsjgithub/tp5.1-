@@ -1,0 +1,10 @@
+PHP如何将XML转成数组
+如果你使用 curl 获取的 xml data
+$xml = simplexml_load_string($data);
+$data['tk'] = json_decode(json_encode($xml),TRUE);
+ 
+如果是直接获取 URL 数据的话
+$xml = simplexml_load_file($data);
+$data['tk'] = json_decode(json_encode($xml),TRUE);
+ 
+先把 simplexml 对象转换成 json，再将 json 转换成数组。

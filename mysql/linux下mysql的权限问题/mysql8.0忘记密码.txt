@@ -1,0 +1,25 @@
+在Linux下忘记MySQL密码后我们可以通过一个mysql的参数–skip-grant-tables &轻松解决这个问题
+亲测在CentOS有效
+
+1.首先关闭掉MySQL系统服务：
+service mysqld stop
+2.使用命令跳过输入密码过程：
+mysqld_safe --skip-grant-tables &
+回车之后在输入命令： mysql 回车
+
+进入 mysql数据库，然后通过语句修改密码：
+注意：先设置为空字符串;
+update user set authentication_string = '' where user = 'root';
+flush privileges;  #立即生效
+进入数据库
+mysql -u root -p //提示输入密码时直接敲回车，
+刚刚已经将密码置空了
+修改密码:
+ 
+alter user 'root'@'localhost' identified by 'new password'; 
+密码形式过于简单则会报错，不影响继续，但是密码不包含字符不行，这是mysql8的新规则
+--------------------- 
+作者：Xavier4j 
+来源：CSDN 
+原文：https://blog.csdn.net/crazy1598/article/details/87786746 
+版权声明：本文为博主原创文章，转载请附上博文链接！

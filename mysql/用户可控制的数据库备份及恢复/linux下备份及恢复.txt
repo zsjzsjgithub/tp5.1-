@@ -1,0 +1,55 @@
+ /**
+     * 执行数据库备份
+     * @return array
+     */
+    public function executeCopy()
+    {
+        $key = 'filename';
+        $copy_time = $this->_redis->getItem('copy_time');
+        //把设置的时间转化为时间戳
+        $copy_time = strtotime(date("Y-m-d {$copy_time}"));
+        $copy_times = $copy_time + 1 * 60;
+        //time() >= $copy_time && time() < $copy_times
+        if (time() >= $copy_time && time() < $copy_times) {
+            /*********************************备份数据库start*********数据库大小100G以下*******************/
+            $db_user = "root";//数据库账号
+            $db_pwd = "147258369asdASD#";//数据库密码
+            $db_name = "help";//数据库名
+            $filename = date("Y-m-d") . "-" . time();
+            //把文件名存redis中，k为时间，v为文件名字
+            $data = $this->_redis->getItem($key);
+            $data = json_decode($data, true);
+            $value = ['time' => date('Y-m-d H:i:s'), 'filename' => $filename];
+            $data[] = $value;
+            $data = json_encode($data);
+            $this->_redis->setItem($key, $data);
+            $name = "/home/wwwroot/help.flcs8.com/helpdata/" . $filename . ".sql";//数据库文件存储路径
+            $exec = "/usr/local/mysql/bin/mysqldump -u" . $db_user . " -p" . $db_pwd . " " . $db_name . " > " . $name;
+            exec($exec);
+            return Response::success('备份成功');
+        } else {
+            return Response::invalidParam('不到数据备份的执行时间');
+        }
+    }
+
+    /**
+     * 执行数据库恢复
+     * @param $filename
+     * @return array
+     */
+    public function executeBack($filename)
+    {
+        if (empty($filename)) return Response::invalidParam('请选择需要恢复的数据');
+        $db_user = "root";//数据库账号
+        $db_pwd = "147258369asdASD#";//数据库密码
+        $db_name = "help";//数据库名
+        $json_data = $this->_redis->getItem('filename');
+        if ($json_data == false) Response::fail('您还没有备份数据库');
+        $datas = json_decode($json_data, true);
+        $array_filename = array_column($datas, 'filename');
+        if (!in_array($filename, $array_filename)) return Response::fail('网络异常');
+        $name = "/home/wwwroot/help.flcs8.com/helpdata/" . $filename . ".sql";//数据库文件存储路径
+        $exec = "/usr/local/mysql/bin/mysql -u" . $db_user . " -p" . $db_pwd . " " . $db_name . " < " . $name;
+        exec($exec);
+        return Response::success('数据已恢复');
+    }

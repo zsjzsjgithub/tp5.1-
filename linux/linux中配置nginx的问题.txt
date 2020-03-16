@@ -1,0 +1,36 @@
+server {
+  listen 80;
+  server_name aaa.zsj.mobi;
+  access_log /data/wwwlogs/www.test.com_nginx.log combined;
+  index index.html index.htm index.php;
+  root /data/wwwroot/tp55/public;
+
+  location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+  #error_page 404 /404.html;
+  #error_page 502 /502.html;
+   location ~* runtime {
+        deny all;
+        return 404;
+    }
+
+  location ~ \.php$ {
+    fastcgi_pass unix:/dev/shm/php-cgi.sock;
+    fastcgi_index index.php;
+    include fastcgi.conf;
+  }
+  location ~ .*\.(gif|jpg|jpeg|png|bmp|swf|flv|mp4|ico)$ {
+    expires 30d;
+    access_log off;
+  }
+  location ~ .*\.(js|css)?$ {
+    expires 7d;
+    access_log off;
+  }
+  location ~ /\.ht {
+    deny all;
+  }
+}
+
+

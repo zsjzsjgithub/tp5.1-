@@ -1,0 +1,17 @@
+php中安装redis（扩展）
+extension=php_redis.dll(php.ini)
+下载redis：https://windows.php.net/downloads/pecl/releases/redis/（该地址可以下redis扩展及igbinary扩展）
+
+根据自己的电脑以及php版本的信息来下载不同的redis版本：
+phpinfo.php中查看自己的版本信息：
+解压后：
+
+把php_igbinary.dll php_igbinary.pdb  php_redis.dll和php_redis.pdb拷贝到D:\phpStudy\php\php-7.0.12-nts\ext（每个人的目录都不一样）。我只用了这两个文件，别的都扔掉了。
+
+打开php.ini：
+把extension=php_igbinary.dll和extension=php_redis.dll拷贝到php.ini当中
+
+看到redis说明php中的redis扩展安装成功。
+
+注意：extension=php_igbinary.dll一定要放在extension=php_redis.dll的前面，否则此扩展不会生效
+还需要下载redis服务端，并且要开启才行

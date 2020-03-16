@@ -1,0 +1,35 @@
+public static function uploadBase64($rootPath,$base64)
+    {
+   
+     //$base64_image_content = $base64;
+        //匹配出图片的格式
+
+    
+    $new_file = $rootPath;
+       
+ if (!file_exists($new_file)) {
+            /
+/检查是否有该文件夹，如果没有就创建，并给予最高权限
+           
+ mkdir($new_file, 0700);
+       
+ }
+        
+$new_file = $new_file.time().mt_rand(1000000,9999999) . ".jpg";
+       
+ if (file_put_contents($new_file, base64_decode($base64))) {
+          
+  $img_path = str_replace($rootPath, '', $new_file);
+        
+    return ['errcode'=>0,'msg'=>'新文件保存成功','result'=>$img_path];
+
+       
+ } 
+else {
+         
+   return ['errcode'=>1,'msg'=>'新文件保存失败'];
+   
+     }
+
+  
+  }

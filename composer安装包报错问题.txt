@@ -1,0 +1,32 @@
+composer install 时遇到 Composer\Downloader\TransportException ...
+ 
+
+安装错误
+
+[Composer\Downloader\TransportException]
+Invalid credentials for 'https://packagist.phpcomposer.com/p/provider-2016%24ae19026fd0d5a3d5733e5a46202305c96ff2ae
+1ccd7988bb88c5fa2a7e490f7d.json', aborting.
+
+解决: 执行这个命令取消镜像就可以了 只不过速度慢而已.
+
+ composer config -g repo.packagist composer https://packagist.org
+
+成功了.
+
+解决过程:
+
+上面的错误是什么证书不合法,也不知道说的啥 一直无法解决, composer self-update . 和 使用国内镜像都不行, 去掉composer文件中的执行的镜像地址,https配置为true/false都不行 .....无语
+
+原因:  后来发现可能是composer文件中已经有一个 包來源的問題，， 也可能是沒有更新composer composer self-update  
+
+參考文中說這個檢測： composer diagnose 才想起要更新 composer self-update .
+
+參考：
+https://segmentfault.com/q/1010000006723443
+composer文件中有这段:
+"repositories": [
+    {
+        "type": "composer",
+        "url": "https://asset-packagist.org"
+    }
+]

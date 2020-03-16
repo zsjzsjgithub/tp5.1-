@@ -1,0 +1,13 @@
+ https://www.cnblogs.com/wtcl/p/6490530.html
+ 在location / {   }  加入下边：
+
+       # try_files $uri $uri/ =404;
+        if ( -f $request_filename) {
+            break;
+        }
+        if ( !-e $request_filename) {
+            rewrite ^(.*)$ /index.php/$1 last;
+            break;
+        }
+    location ~ .+\.php($|/) { }加入下边：
+fastcgi_param PATH_INFO $fastcgi_path_info; #加上这一句就可以跑了

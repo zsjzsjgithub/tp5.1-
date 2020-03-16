@@ -1,0 +1,48 @@
+说明：在linux中定时运行shell 脚本，去执行项目中的方法
+ shell代码：
+#!/bin/bash
+curl -g http://aaa.zsj.mobi/index/index/create(要执行的方法)
+shell文件必须有777权限（chmod 777 hello.shell）
+//编写定时任务
+1.先进入根目录
+cd /root
+2.使用vi编辑器 可以直接 # vim hello.sh编写第一个shell文件 hello.sh， 注意一定要以.sh结尾
+vim hello.sh
+
+3.编写第一个shell文件，#!/bin/bash 是必须要写的，表示要是/bin/bash这个执行脚本的命令执行接下来写的脚本, echo "hello world !!"表示想前端打印一句话，具体看各自需求。
+4.通过chmod命令赋予该脚本的执行权限chmod 755 hello.sh，否则没有执行权限，/root/hello.sh表示在全路径下执行该shell脚本
+service crond start
+用以下的方法启动、关闭这个cron服务： 
+service crond start //启动服务 
+service crond stop //关闭服务 
+service crond restart //重启服务 
+service crond reload //重新载入配置
+查看crontab服务状态：service crond status 
+手动启动crontab服务：service crond start
+
+查看crontab服务是否已设置为开机启动，执行命令：ntsysv 
+加入开机自动启动: 
+chkconfig –level 35 crond on
+
+也可以用设置开机自动启动crond服务: 
+[root@CentOS ~]# chkconfig crond on
+
+设置需要执行的脚本 
+
+新增调度任务可用两种方法： 
+1)、在命令行输入: crontab -e 然后添加相应的任务，wq存盘退出。 
+2)、直接编辑/etc/crontab 文件，即vi /etc/crontab，添加相应的任务。 
+crontab -e配置是针对某个用户的，而编辑/etc/crontab是针对系统的任务 
+查看调度任务 
+crontab -l //列出当前的所有调度任务 
+crontab -l -u jp //列出用户jp的所有调度任务 
+删除任务调度工作 
+crontab -r //删除所有任务调度工作 
+ ,默认的文件形式如下：
+crontab -e
+*/1 * * * *  /root/hello.sh （每分钟运行一次hello.sh 这个脚本）
+重启 service crond restart
+
+
+用新增任务调度的第二种方法：vim /etc/crontab 执行PHP定时任务
+*/1 * * * * root php -f /home/wwwroot/xinlingshou.hnzhanfeng.com/public/index.php /admin/daybonus/sendAward >> /log/xinlingshou_daybonus.log

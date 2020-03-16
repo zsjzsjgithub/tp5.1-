@@ -1,0 +1,3 @@
+composer create-project topthink/think tp5.1
+
+如果下载不了需要配置中文镜像 composer config -g repo.packagist composer https://packagist.phpcomposer.com

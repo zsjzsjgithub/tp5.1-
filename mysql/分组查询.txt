@@ -1,0 +1,30 @@
+$where=['uid'=>2];
+        $field = ['award_id,sum(money) as sum'];
+        $data=$this->awardRecord->field($field)->where($where)->group('award_id')->having('sum>15')->select();
+//注意：因为sum是别名不存在这个字段，所有需要用having来筛选相当于where
+
+//分组查询多个字段
+$field = ['year,sum(money) as money','form_nick_name'];
+        $month_points = $this->awardRecordData->listByWhere($where, $field, ['year desc'], 'year,form_nick_name');
+ [
+             - {
+                "year":"2020-09",
+                "money":"100.00",
+                "form_nick_name":"李思"
+            },
+             - {
+                "year":"2019-09",
+                "money":"100.00",
+                "form_nick_name":"李思"
+            },
+             - {
+                "year":"2019-08",
+                "money":"30000.00",
+                "form_nick_name":"李思"
+            },
+             - {
+                "year":"2019-07",
+                "money":"55.00",
+                "form_nick_name":"李思"
+            }
+        ]

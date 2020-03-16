@@ -1,0 +1,4 @@
+在PHPstudy v8.0版，安装了composer重启电脑，
+配置中文镜像 composer config -g repo.packagist composer https://packagist.phpcomposer.com
+如果选择php版本的目录报错（如选择的是7.2.9安装不了）
+1.打开openssl扩展 和php_mysqli扩展，如果还是安装不了，到php.exe点击运行即可

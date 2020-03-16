@@ -1,0 +1,10 @@
+user表关联 role表 rank表 bank表
+$data=$this->userData->where(['id'=>$uid])->with(['role'=>function($query){
+            $query->field('id,name');
+        },'rank'=>function($query){
+            $query->field('id,name');
+        },'bank'=>function($query){
+            $query->field('id,bank_name');
+        }])->find();
+
+A517778092067031

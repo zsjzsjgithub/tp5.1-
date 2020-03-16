@@ -1,0 +1,28 @@
+在Linux下忘记MySQL密码后我们可以通过一个mysql的参数–skip-grant-tables &轻松解决这个问题
+亲测在CentOS有效
+
+1.首先关闭掉MySQL系统服务：
+service mysqld stop
+2.使用命令跳过输入密码过程：
+mysqld_safe --skip-grant-tables &
+回车之后在输入命令： mysql 回车
+
+进入 mysql数据库，然后通过语句修改密码：
+update user set password=password("*******") where user="*******";  #修改密码报错
+ERROR 1054 (42S22): Unknown column 'password' in 'field list'
+mysql> update mysql.user set authentication_string=password('*******') where user='*******';  #修改密码成功
+Query OK, 1 row affected, 1 warning (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 1
+
+mysql> flush privileges;  #立即生效
+Query OK, 0 rows affected (0.00 sec)
+
+重启mysql系统服务后就可以用新密码进入MySQL了～
+service mysqld restart
+
+出现的问题：
+一开始因为种种原因，出现了我输入命令： mysqld_safe --skip-grant-tables & 后无法进入mysql的情况
+错误提示：Access denied for user ‘root’@'localhost' (using password:no) [1] 退出1 mysqld_safe -skip-grant-tables
+
+这个时候重启一下系统就好了(重启linux系统命令)
+reboot

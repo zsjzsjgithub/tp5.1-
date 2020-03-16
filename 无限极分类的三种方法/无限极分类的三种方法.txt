@@ -1,0 +1,235 @@
+无限极分类1：
+public function judeg($id)
+
+{
+
+   $rs = Db::name('finance_class') -> field('parent_code') -> where('id',$id) -> select();
+
+   $i = 1;
+
+   foreach($rs as $k => $v){
+
+   　　if($v['parent_code'] <> 0){
+
+   　　　　$i += $this -> judeg($v['parent_code']);
+
+      }
+
+   }
+
+   return $i;
+
+}
+
+ 
+
+ public function cid($id,$pid)
+
+ {
+
+    $w['parent_code'] = $id;
+
+    $rs = Db::name('finance_class')
+
+       -> field('id,code,name,parent_code')
+
+       -> where($w)
+
+       -> order('code asc')
+
+       -> select();
+
+    $str = '';
+
+    foreach ($rs as $k => $v) {
+
+        $name = $v['name'];
+
+        $_id = $v['id'];
+
+        $cutOff = '';
+
+        for($i = 0; $i < $this -> judeg($_id); $i++){
+
+        　　$cutOff.='-';
+
+        }
+
+        if($_id == $pid){
+
+        　　$str.='<p>他的id='.$_id.'====他的级别'.$cutOff.$name.'</p>';
+
+        }else{
+
+        　　$str.='<p>他的id='.$_id.'====他的级别'.$cutOff.$name.'</p>';
+
+        }
+
+        $str.=$this->cid($_id,$pid);
+
+    }
+
+    return $str;
+
+37}
+
+public function finance_c()
+
+{
+
+   $w['type'] = '资产类';
+
+   $w['parent_code'] = 0;
+
+   $rs = Db::name('finance_class')
+
+     　　-> field('id,code,name,parent_code')
+
+     　　-> where($w)
+
+        -> select();
+
+   $str = '';
+
+   foreach ($rs as $k => $v){
+
+   　　$str.= '<p>一级name:'.$v['name'].'</p>';
+
+   　　$str.=    $this -> cid($v['id'],0);
+
+   }
+
+   echo $str;
+
+}
+
+这个方法出来的效率慢，而且很绕。
+
+
+
+方法2
+public function getVoucherClass()
+
+{
+
+    $lists = Db::name('finance_class')->select();
+
+ 
+
+    $lists = $this->getTree($lists);
+
+ 
+
+    foreach($lists as $value){
+
+    　　echo str_repeat('--', $value['level']), $value['name'].'<br />';
+
+    }
+
+10}
+
+ 
+
+/**
+
+* 递归实现无限极分类
+
+* @param $array 分类数据
+
+* @param $pid 父ID
+
+* @param $level
+
+* @return $list 
+
+*/
+
+function getTree($array, $pid =0, $level = 0){
+
+   static $list = [];
+
+   foreach ($array as $key => $value){
+
+   　　if ($value['parent_code'] == $pid){
+
+      　 $value['level'] = $level;
+
+         $list[] = $value;
+
+         unset($array[$key]);
+
+         $this->getTree($array, $value['id'],$level+1);
+
+      }
+
+   }
+
+   return $list;
+
+30}
+
+
+无限极分类3：
+public function index()
+
+   {
+
+      $lists = \think\Db::table('ozyx_finance_class')->select();
+
+      $lists = $this->getTree($lists,0);
+
+
+      foreach ($lists as $k => $v) {
+
+              $lists_one[$v['type']][]=$v;
+
+      }
+
+ 
+
+      // halt($lists_one);
+
+      $this->assign('lists', $lists_one);
+
+ 
+
+      return view();
+
+   }
+
+ 
+
+   /**
+
+   * 无限极分类
+
+   */
+
+   function getTree($data, $pid)
+
+   {
+
+       $tree = '';
+
+       foreach($data as $k => $v)
+
+       {
+
+         if($v['parent_code'] == $pid)
+
+         {        
+
+              $v['parent_code'] = $this->getTree($data, $v['id']);
+
+              $tree[] = $v;
+
+                 unset($data[$k]);
+
+         }
+
+       }
+
+       return $tree;
+
+   }
+

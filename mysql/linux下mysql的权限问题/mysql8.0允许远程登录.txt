@@ -1,0 +1,3 @@
+creaMySQL [(none)]> create user db_user@'%' identified by 'db_pass'; #创建用户
+ MySQL [(none)]> grant all privileges on db_name.* to db_user@'%' with grant option; #授权
+ MySQL [(none)]> exit; #退据库控制台，特别注意有分号

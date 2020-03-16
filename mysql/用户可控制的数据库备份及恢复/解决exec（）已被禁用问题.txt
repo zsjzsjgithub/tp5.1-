@@ -1,0 +1,2 @@
+ php.ini ”文件中的“ disabled_functions ”列表，并从列表中删除exec（）
+重启PHP:service php-fpm restart

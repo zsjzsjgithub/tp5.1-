@@ -1,0 +1,60 @@
+https://www.cnblogs.com/piaobodewu/p/9321269.html
+
+这一段在用thinkPHP5开发微信小程序接口的时候，在同一个控制器一个方法中存入session，在另一个方法中取出session，一直都是无法取出。
+
+查阅各种资料得到原因：thinkPHP5里面的session是给浏览器用的，非浏览器的方式是没有办法访问到那个session的，只能用其他方式来代替session。 
+
+对策：
+
+1.（推荐）使用TP5自带的缓存方法
+
+可以完美代替session，甚至可以每条手动设置时间，比session更方便，
+
+（用过tp5自带session的肯定知道，session时间一般是固定的，用起来很僵硬）。
+
+ 
+
+复制代码
+//设置缓存（有效期3600秒）
+
+Cache::set('name',$value,3600);
+
+//获取缓存数据可以使用：
+
+Cache::get('name');
+复制代码
+提醒一下，如果$value是数组的话要先json_encode()编码成字符串再用
+
+ 
+
+2.Redis方法（此方法稍微麻烦一些）
+
+按照教程在服务器上配置好redis数据库
+
+使用方法直接上代码：
+
+复制代码
+//存入redis
+//开启redis数据库服务
+$redis = new Redis();
+//连接ridis数据库
+$redis->connect('127.0.0.1', 6379);
+//存入数据(有效期3600秒)
+$redis->set($sessioncode,$value, 3600);
+
+
+//取出redis
+//开启redis数据库服务
+$redis = new Redis();
+//连接ridis数据库
+$redis->connect('127.0.0.1', 6379);
+//取出数据
+$data = $redis->get($session);
+复制代码
+同样，提醒一下，如果$value是数组的话要先json_encode()编码成字符串再用
+
+ 
+
+3.使用memcache
+
+上述三种方法均可，建议使用第一种。

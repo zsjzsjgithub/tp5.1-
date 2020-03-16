@@ -1,0 +1,31 @@
+导入
+1，将要导入的.sql文件移至bin文件下，这样的路径比较方便
+2，进入MySQL：mysql -u 用户名 -p
+如我输入的命令行:mysql -u root -p    (输入同样后会让你输入ySQL的密码)
+3，新建一个名为blog的目标数据库 mysql>create database blog;
+4.输入：mysql>use 目标数据库名
+如我输入的命令行:mysql>use blog;
+5，导入文件：mysql>source 导入的文件名;
+如我输入的命令行：mysql>source blog.sql;
+
+导出
+1.导出整个数据库
+mysqldump -u 用户名 -p 数据库名 > 导出的文件名
+mysqldump -u root -p dataname >dataname.sql
+
+这个时候会提示要你输入root用户名的密码,输入密码后dataname数据库就成功备份在mysql/bin/目录中.
+
+?
+
+
+2.导出一个表
+mysqldump -u 用户名 -p 数据库名 表名> 导出的文件名
+mysqldump -u root -p dataname users> dataname_users.sql
+
+?
+
+
+3.导出一个数据库结构
+mysqldump -u wcnc -p -d –add-drop-table smgp_apps_wcnc >d:/wcnc_db.sql
+-d 没有数据 –add-drop-table 在每个create语句之前增加一个drop table
+原文链接：https://blog.csdn.net/qq_41848006/article/details/89049374

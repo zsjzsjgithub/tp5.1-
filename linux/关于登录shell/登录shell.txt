@@ -1,0 +1,11 @@
+我们知道世界上有很多shell，sh、csh、bash、tcsh、ksh等等太多了。那么，我们的linux安装了不同的shell之后，我们怎么修改各用户的shell呢？
+
+下面小编就教你如何修改用户的shell。
+
+开始之前，我们需要有root权限。
+
+这里我们就以binn这个用户为例。
+
+我们先来看看我们机器上有哪些shell。
+
+cat /etc/shells

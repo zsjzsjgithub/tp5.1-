@@ -1,0 +1,31 @@
+https://blog.csdn.net/weixin_34015336/article/details/86361436（详情）
+
+快捷注册（V5.0.4+）事件方法如果返回false，则不会继续执行。
+V5.0.4+版本开始，系统提供了内置的事件注册的快捷方法，你可以用下面的方式替代
+
+namespace app\index\model;
+ 
+use think\Model;
+ 
+class User extends Model
+{
+    protected static function init()
+    {
+        User::beforeInsert(function ($user) {
+            if ($user->status != 1) {
+                return false;
+            }
+        });
+    }
+}
+这些模型类的快捷方法如下：
+
+标签位	描述
+beforeInsert	新增前
+afterInsert	新增后
+beforeUpdate	更新前
+afterUpdate	更新后
+beforeWrite	写入前
+afterWrite	写入后
+beforeDelete	删除前
+afterDelete	删除后

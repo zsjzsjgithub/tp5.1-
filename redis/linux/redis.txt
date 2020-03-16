@@ -1,0 +1,3 @@
+service redis-server restart 重启redis 
+/usr/local/redis/bin redis安装目录 
+/usr/local/redis/etc/redis.conf   redis配置文件

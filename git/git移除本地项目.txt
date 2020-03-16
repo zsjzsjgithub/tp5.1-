@@ -1,0 +1,5 @@
+ 1.首次切换到www目录
+C:\laragon\www
+
+2.执行以下命令：
+ rm -rf minesweeper

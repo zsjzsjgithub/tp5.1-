@@ -1,0 +1,80 @@
+1.在自己的GitHub上创建一个仓库。
+2.打开命令行工具，切换到需要上传的工程目录下。
+3.初始化当前目录作为Git仓库。git init
+4.添加目录下的文件到本地仓库。git add . 添加当前目录下的所有文件
+5.提交staged的文件git commit -m "initial commit"
+6.从GitHub上拷贝之前新建的仓库地址。
+7.使用命令行添加远程仓库的地址。git remote add origin https://github.com/theonegis/keras-examples.git
+git remote -v 查看远程仓库地址
+
+8.Push本地仓库到远程GitHub。git push -u origin master
+如果提示冲突可以强制push：git push -u origin master -f
+
+.gitignore文件用于在提交项目文件时过滤一些不需要的文件。比如你的项目文件夹中包含若干.o和.cpp的文件，
+但是我只想提交.cpp的文件，这个时候.gitignore文件就作用非凡了。
+
+注：在github创建代码仓库时要养成一个好习惯
+，一定记得要添加.gitignore文件,自己的项目是用什么语言写的就选择相应的.gitignore文件，如下图所示，
+小编选择的是C++。
+
+
+如果不小心忘记创建.gitignore文件，而此时项目的代码已经提交到github上，
+其中包含了一些不想提交的内容，下面小编将介绍一种可行的解决方法。
+
+
+
+
+二、解决办法
+1.在项目根目录中创建.gitignore文件
+，在文件中添加不想版本控制的文件，假设你的项目文件夹名为mysite，mysite文件夹里有一个bin文件夹。
+
+
+#这句的意思是忽略bin文件夹中所有带有.d后缀名的文件。
+bin/*.d
+#忽略mysite项目中所有带.o后缀名的文件。
+
+*.o     
+1
+2
+3
+4
+2.在.gitignore文件中“#”后面的语句会被忽略(相当于注释)。
+在.gitignore文件中一行只能出现一个语句（注释语句如果和过滤规则写在同一行，则会过滤规则会失效）。
+有关.gitignore文件的使用方法请参考：.gitignore文件的使用方法 
+
+3.提交.gitignore文件并使其中的规则生效： 
+有时候在 .gitignore 文件中添加规则并未生效，
+原因是 .gitignore 只能忽略原来没有被 track 的文件，如果某些文件已经加入了版本管理中，
+修改 .gitignore 是无效的。解决方法：先把不想记录文件的本地缓存删除，再在 .gitignore 中添加忽略该文件，然后再提交。
+
+
+#清除本地缓存(改变成未track状态)
+#git rm -r --cached . 
+表示清除项目中所有文件的本地缓存
+git rm -r --cached xxx    #xxx表示不想版本控制的文件，比如小编可以输入test.o
+
+     #.gitignore中的忽略规则应该与之相对应
+git add .  
+ #添加除了忽略文件外的所有文件
+git commit -m "此处可以描述你提交的信息"
+git push -f #强制推送
+1
+2
+3
+4
+5
+6
+7
+注意：
+ 
+1.在这里强调一下，如果本地版本与github上的远程仓库未建立联系，可以参考命令行：git push -f -u origin master 
+
+2.git add xxx (xxx表示文件名)这个命令行是将本地项目添加到暂存区（可以通过git rm -r –cached xxx 清空该文件的本地缓存），
+如果添加之后用git commit -m “描诉” 这条命令行提交了文件之后，即使用git rm -r –cached 文件名 清空了本地缓存之后再push上去仍然会在github上显示提交的文件
+
+3.如果git add xxx之后git rm -r –cached xxx，然后再git commit -m “描述”，则提交内容为空。
+--------------------- 
+作者：Lcoderfit 
+来源：CSDN 
+原文：https://blog.csdn.net/luhu124541/article/details/82048357 
+版权声明：本文为博主原创文章，转载请附上博文链接！

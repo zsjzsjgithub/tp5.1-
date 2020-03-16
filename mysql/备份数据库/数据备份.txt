@@ -1,0 +1,21 @@
+$key = 'filename';
+        $copy_time = $this->_redis->getItem('copy_time');
+        //把设置的时间转化为时间戳
+        $copy_time = strtotime(date("Y-m-d {$copy_time}"));
+        $copy_times = $copy_time + 1 * 60;
+        if (time() >= $copy_time && time() < $copy_times) {
+            /*********************************备份数据库start*********数据库大小100G以下*******************/
+            $db_user = "root";//数据库账号
+            $db_pwd = "root";//数据库密码
+            $db_name = "test";//数据库名
+            $filename = date("Y-m-d") . "-" . time();
+            //把文件名存redis中，k为时间，v为文件名字
+            $data = $this->_redis->getItem($key);
+            $data = json_decode($data, true);
+            $value = ['time' => date('Y-m-d H:i:s'), 'filename' => $filename];
+            $data[] = $value;
+            $data = json_encode($data);
+            $this->_redis->setItem($key, $data);
+            $name = "D:/data/second_bear" . $filename . ".sql";//数据库文件存储路径
+            $exec = "D:/phpstudy/PHPTutorial/MySQL/bin/mysqldump -u" . $db_user . " -p" . $db_pwd . " " . $db_name . " > " . $name;
+            exec($exec);

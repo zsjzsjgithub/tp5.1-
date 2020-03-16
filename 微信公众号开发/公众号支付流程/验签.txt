@@ -1,0 +1,58 @@
+https://blog.csdn.net/chenrui310/article/details/80830798
+/***
+     * @Notes:公众号 支付回调处理
+     * @Interface notify
+     * @author: Chenrui310
+     * @Time: 2018/6/18   16:26
+     */
+    public function notify()
+    {
+ 
+        // 获取微信回调的数据
+        $notifiedData = file_get_contents('php://input');
+ 
+        //XML格式转换
+        $xmlObj = simplexml_load_string($notifiedData, 'SimpleXMLElement', LIBXML_NOCDATA);
+        $xmlObj = json_decode(json_encode($xmlObj),true);
+ 
+        // 当支付通知返回支付成功时
+        if ($xmlObj['return_code'] == "SUCCESS" && $xmlObj['result_code'] == "SUCCESS") {
+ 
+            //获取返回的所以参数
+            //这里是要把微信返给我们的所有值，先删除sign的值，其他值 按ASCII从小到大排序，md5加密+‘key’；
+            
+            foreach( $xmlObj as $k=>$v) {
+                if($k == 'sign') {
+                    $xmlSign = $xmlObj[$k];
+                    unset($xmlObj[$k]);
+                };
+            }
+ 
+            $sign = http_build_query($xmlObj);
+            //md5处理
+            $sign = md5($sign.'&key='.'你们公司的key');
+            //转大写
+            $sign = strtoupper($sign);
+ 
+            //验签名。默认支持MD5
+            //验证加密后的32位值和 微信返回的sign 是否一致！！！
+            //验证加密后的32位值和 微信返回的sign 是否一致！！！
+            //验证加密后的32位值和 微信返回的sign 是否一致！！！
+            if ( $sign === $xmlSign) {
+                // 总订单号
+                $trade_no = $xmlObj['out_trade_no'];
+ 
+                //处理你商城购物的操作信息
+                //处理你商城购物的操作信息
+                //处理你商城购物的操作信息
+                //处理你商城购物的操作信息
+                //处理你商城购物的操作信息
+                //处理你商城购物的操作信息
+ 
+            }
+ 
+        }
+    }
+————————————————
+版权声明：本文为CSDN博主「chenrui310」的原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接及本声明。
+原文链接：https://blog.csdn.net/chenrui310/article/details/80830798

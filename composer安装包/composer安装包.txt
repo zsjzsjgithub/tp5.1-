@@ -1,0 +1,9 @@
+composer create-project topthink/think tp5.1 //安装tp5.1框架
+如果下载不了需要配置中文镜像 composer config -g repo.packagist composer https://packagist.phpcomposer.com
+composer require topthink/think-image  ThinkPHP5图像包
+composer require endroid/qr-code  二维码
+composer require webmozart/assert 验证类
+composer require topthink/think-captcha=2.* tp5.1自带验证码
+composer require phpoffice/phpspreadsheet   导入导出数据成xml文档格式
+composer require wangju/ding-notice 
+ding-notie是一个钉钉机器人消息发送的扩展，您可以通过此扩展便捷的发送钉钉消息，进行监控和提醒操作

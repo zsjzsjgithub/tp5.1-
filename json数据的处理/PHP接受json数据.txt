@@ -1,0 +1,4 @@
+
+前段：json={"id":3,"state":1,"id_del": [ 2, 3],"devide":[{"id":4,"rate":10,"currency_id":1},{"id":3,"rate":90,"currency_id":2}]}
+后台接收：$data=input('json');   $data=json_decode($data,true);
+ 

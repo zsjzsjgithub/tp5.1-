@@ -1,0 +1,1 @@
+在tp5中开发要用tp5的composer包 composer require naixiaoxin/think-wechat 

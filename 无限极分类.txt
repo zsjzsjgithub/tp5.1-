@@ -1,0 +1,13 @@
+function infinityCategory($data,$pid=0)
+{
+   $ruleArr = [];
+    foreach ($data as $k=>$v) {
+        if ($v['pid'] == $pid) {
+            $v['lower'] = infinityCategory($data,$v['id']);
+            $ruleArr [] = $v;
+          unset($data[$k]);
+        }
+    }
+    return $ruleArr;
+
+}

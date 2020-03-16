@@ -1,0 +1,12 @@
+数据库为test
+1.先创建一个bk.sh文件 mkdir /data/bkTest.sh    授权 chmod 0777 ./bkTest（必须要有执行权限x）
+.sh内容
+#!/bin/bash
+#mysqldump的安装路径 /usr/local/mysql/bin/mysqldump
+/usr/local/mysql/bin/mysqldump -uzhangshijie -pzhangshijie123456 test > /data/backup/Test__$(date +%Y%m%d_%H%M%S).sql
+echo "备份已执行";
+2.写定时任务
+#每天13点备份数据库，把.sh中echo的内容写入bkTest.log
+crontab -e 
+* 13 * * * /data/bkTest.sh >>bkTest.log
+

@@ -1,0 +1,21 @@
+iptables -L 查看防火墙列表
+#编辑防火墙文件 （建议都在配置文件配置，不要命令配置）
+vi /etc/sysconfig/iptables 
+#添加80和3306端口 等等（自己配置）
+-A INPUT -i lo -j ACCEPT
+-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+-A INPUT -p tcp -m state --state NEW -m tcp --dport 22 -j ACCEPT
+-A INPUT -p tcp -m state --state NEW -m tcp --dport 3306 -j ACCEPT
+-A INPUT -p tcp -m state --state NEW -m tcp --dport 80 -j ACCEPT
+-A INPUT -p tcp -m state --state NEW -m tcp --dport 21 -j ACCEPT
+-A INPUT -p tcp -m state --state NEW -m tcp --dport 20000:30000 -j ACCEPT
+-A INPUT -p tcp -m state --state NEW -m tcp --dport 443 -j ACCEPT
+-A INPUT -p icmp -m icmp --icmp-type 8 -j ACCEPT
+-A INPUT -m state --state NEW -m tcp -p tcp --dport 6379 -j ACCEPT
+-A INPUT -m state –state NEW -m tcp -p tcp –dport 80 -j ACCEPT        　　 #80端口开放
+
+-A INPUT -m state –state NEW -m tcp -p tcp –dport 3306 -j ACCEPT　　　 #3306端口开放
+
+-I INPUT -s 113.106.93.110 -p tcp --dport 8089 -j DROP                      　　　#禁止指定IP访问 8089
+
+-I INPUT -s 113.106.93.110 -p tcp --dport 8080 -j ACCEPT                 　　　#开放固定ipIP访问 8080

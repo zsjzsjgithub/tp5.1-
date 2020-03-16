@@ -1,0 +1,37 @@
+public function listGroup($member, $startLevel, $endLevel)
+    {
+       return json($this->userLogic->listGroup($member, $startLevel, $endLevel));
+
+    }
+public function listGroup($member='root', $startLevel=0, $endLevel=0)
+    {
+
+        $curUser = $this->userData->where(['member'=>$member])->find();
+        if (empty($curUser)) return Response::invalidParam('用户账号信息错误');
+
+        $groupMember = $this->memberLogic->listDownNode($curUser['id'], ['id', 'upid', 'nick_name', 'phone', 'rank_id', 'group_direct','member','account'], intval($startLevel), intval($endLevel));
+
+        if ($groupMember && count($groupMember) > 0) {
+
+            $groupMember = $this->combineRankInfo($groupMember);
+            return Response::success('success', $groupMember);
+        }
+        return Response::success();
+    }
+
+    private function combineRankInfo($userData)
+    {
+        $rankGroup = $this->rankData->listByWhere([], ['id', 'name']);
+        $rankGroup = array_column($rankGroup->toArray(), 'name', 'id');
+
+        foreach ($userData as $k => &$v) {
+            $v['rank_name'] = $rankGroup[$v['rank_id']];
+        }
+
+        return $userData;
+    }
+public function listDownNode($nodeId, array $fields, $startLevel = 0, $endLevel = 0)
+    {
+
+        return $this->listBase($nodeId, $fields, 'down', 2, $startLevel, $endLevel);
+    }

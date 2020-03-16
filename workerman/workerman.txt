@@ -1,0 +1,4 @@
+https://www.kancloud.cn/manual/thinkphp5/235128    tp5手册
+qq4752814412017年11月13日
+https://github.com/qq475281441/tp5-gatewayworker-demo 
+去看看这个整合gatewayworker的demo，下载直接可用，像发送消息那些跟官方的gatewayworker一样，封装好了可以直接用

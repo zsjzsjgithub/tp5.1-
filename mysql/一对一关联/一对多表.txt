@@ -1,0 +1,22 @@
+
+在payConfig模型中：
+public function devide(){
+        return $this->hasMany('PayDivide','config_id','id')->field('id,rate,config_id,currency_id,is_del');
+    }
+
+    public function categorys()
+    {
+        return $this->belongsTo('Categorys','categorys_id','id')->field('id,name');
+    }
+在divide模型中：
+public function currency()
+    {
+        return $this->belongsTo('currency','currency_id','id')->field('id,currency');
+    }
+
+$where [] = ['is_del', '=', CommonEnum::$undeleted];
+        $data = $this->payConfigData->with(['categorys', 'devide' => function ($query) use ($where) {
+            $query->where($where)->with(['currency']);
+        }])
+            ->where($where)
+            ->select();

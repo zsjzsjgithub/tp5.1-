@@ -1,0 +1,17 @@
+redis默认只能本地连接
+
+设置允许远程访问:
+/usr/local/redis/etc/redis.conf  更改此配置文件
+61行  bind 127.0.0.1  改为0.0.0.0 
+80行 protected-mode yes  安全模式改为 yes改为no
+
+防火墙:在阿里云中把6379添加到安全组中
+
+在linux的防火墙中开放端口  vim  /etc/sysconfig/iptables
+添加 -A INPUT -m state –state NEW -m tcp -p tcp –dport 6379 -j ACCEPT安全组
+重启防火墙service iptables restart
+开放的端口位于/etc/sysconfig/iptables中
+查看时通过 more /etc/sysconfig/iptables 命令查看
+重启redis    service redis-server restart
+
+https://www.jb51.net/article/136441.htm  详情

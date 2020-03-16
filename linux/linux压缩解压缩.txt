@@ -1,0 +1,50 @@
+)对于.zip
+linux下提供了zip和unzip程序，zip是压缩程序，unzip是解压程序。它们的参数选项很多，可用命令zip -help和unzip -help查看，这里只做简单介绍，举例说明一下其用法：
+
+# zip test.zip test.jpg test.png
+这条命令是将test.jpg和test.png压缩成一个zip包
+# zip test.zip *.jpg
+这条命令是将所有.jpg的文件压缩成一个zip包
+# zip -r test.zip test
+这条命令是将文件夹test压缩成一个zip包
+# unzip test.zip
+这条命令是将test.zip中的所有文件解压出来
+　把/home目录下面的mydata目录压缩为mydata.zip
+
+　# zip -r mydata.zip mydata #压缩mydata目录
+
+　把/home目录下面的mydata.zip解压到mydatabak目录里面
+
+　# unzip mydata.zip -d mydatabak
+
+ 
+
+2)对于.rar
+
+安装： sudo apt-get install rar unrar
+
+或者可从http://www.rarsoft.com/download.htm下载 RAR for Linux 编译安装
+# tar -xzpvf rarlinux-3.8.0.tar.gz
+# cd rar
+# make
+这样就安装好了，安装之后就有了rar和unrar这两个程序，rar是压缩程序，unrar是解压程序。它们的参数选项很多，可用命令rar -help和unrar -help查看，这里亦简单举例说明一下其用法：
+
+# rar a test.rar test.jpg test.png
+这条命令是将test.jpg和test.png压缩成一个rar包
+# rar a test.rar *.jpg
+这条命令是将所有.jpg的文件压缩成一个rar包
+# rar a test.rar test
+这条命令是将文件夹test压缩成一个rar包
+# unrar e test.rar
+这条命令是将test.rar中的所有文件解压出来
+
+
+三、tar.gz格式
+
+     这种格式是我使用得最多的压缩格式。它在压缩时不会占用太多CPU的，而且可以得到一个非常理想的压缩率。 
+     压缩方式： 
+     tar -zcvf archive_name.tar.gz filename
+     解压缩方式： 
+     tar -zxvf archive_name.tar.gz 
+    上面这个解包命令将会将文档解包在当前目录下面。当然，你也可以用下面的这个命令来指定解包的路径： 
+     tar -zxvf archive_name.tar.gz -C new_dir 

@@ -1,0 +1,6 @@
+use think\facade\Request;
+Request::domain() 获取当前域名http://wechat.zsj.mobi
+
+Request::url()  获取当前url地址 不含域名/api/Usercenter/Usercenter
+
+Request::url(true)获取当前url地址 含域名 http://wechat.zsj.mobi/api/Usercenter/Usercenter

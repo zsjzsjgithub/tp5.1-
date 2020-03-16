@@ -1,0 +1,61 @@
+https://blog.csdn.net/weixin_37616043/article/details/87721181?tdsourcetag=s_pctim_aiomsg  
+
+
+/**
+     * 执行数据库备份
+     * @return array
+     */
+    public function executeCopy()
+    {
+        $copy_time = $this->_redis->getItem('copy_time');
+        //把设置的时间转化为时间戳
+        $copy_time=strtotime(date("Y-m-d {$copy_time}"));
+        if (time() >= $copy_time && time() < $copy_times) {
+            /*********************************备份数据库start*********数据库大小100G以下*******************/
+            $db_user = "root";//数据库账号
+            $db_pwd = "root";//数据库密码
+            $db_name = "test";//数据库名
+            $filename = date("Y-m-d") . "-" . time();
+            //把文件名存redis中，新文件名覆盖旧的
+            $this->_redis->setItem('filename',$filename);
+            $name = "D:/data/second_bear" . $filename . ".sql";//数据库文件存储路径
+            $exec = "D:/phpstudy/PHPTutorial/MySQL/bin/mysqldump -u" . $db_user . " -p" . $db_pwd . " " . $db_name . " > " . $name; mysqldump.exe的存储路径
+            $result = exec($exec);
+
+            if ($result) {
+                return Response::success('备份成功');
+            } else {
+                return Response::fail('备份失败');
+            }
+        } else {
+            return Response::invalidParam('不到数据备份的执行时间');
+        }
+    }
+
+    /**
+     * 执行数据库恢复
+     * @return array
+     */
+    public function executeBack()
+    {
+        $back_time = $this->_redis->getItem('back_time');//时分的格式 如8:00
+        //把设置的时间转化为时间戳
+        $back_time=strtotime(date("Y-m-d {$back_time}"));
+        if (true) {
+            $db_user = "root";//数据库账号
+            $db_pwd = "root";//数据库密码
+            $db_name = "test";//数据库名
+            $filename = $this->_redis->getItem('filename');
+            if ($filename==false) Response::fail('您还没有备份数据库');
+            $name = "D:/data/second_bear" . $filename. ".sql";//数据库文件存储路径
+            $exec = "D:/phpstudy/PHPTutorial/MySQL/bin/mysql -u" . $db_user . " -p" . $db_pwd . " " . $db_name . " < " . $name;
+            $result = exec($exec);
+            if ($result) {
+                return Response::success('恢复数据成功');
+            } else {
+                return Response::fail('恢复数据失败');
+            }
+        } else {
+            return Response::invalidParam('不到数据恢复的执行时间');
+        }
+    }

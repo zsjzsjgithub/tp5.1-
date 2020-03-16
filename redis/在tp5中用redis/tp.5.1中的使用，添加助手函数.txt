@@ -1,0 +1,58 @@
+tp5.1 redis 使用
+第一步:在框架根目录config里面新建redis.php文件配置ip及端口:如下：
+
+<?php
+
+return [
+    'host' => '140.143.190.248',//要连接的ip
+    'port' => '6379',
+'password'=>'123456'
+];
+第二步：在根目录extend里新建module目录，并在其里面建Redis.php文件，文件内容如下:
+
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Mac
+ * Date: 2018/8/20
+ * Time: 下午1:52
+ */
+
+namespace module;
+
+
+class Redis extends \Redis
+{
+    public static function redis() {
+        $con = new \Redis();
+        $con->connect(config('redis.host'), config('redis.port'), 5);
+        $con->auth(config('redis.password'));//密码
+        return $con;
+    }
+}
+第三步:在项目根目录thinkphp目录里helper.php里设置redis助手函数，加入如下内容:
+
+if (!function_exists('redis')) {
+    /**
+     * 获取容器对象实例
+     * @return Container
+     */
+    function redis()
+    {
+        return \model\Redis::redis();　　　　　　
+    }
+}
+第四步:在控制器里使用:
+
+例如：（1）给任务id为1的库存设为3个
+
+redis()->set('task_num_1',3);
+（2）获取任务列表某任务的库存，如下
+
+$taskid = input('task_id');
+$num = redis()->get('task_num_' . $taskid);
+（3）创建订单后减去Redis里相应的任务库存
+
+//创建订单结束
+redis()->decr('task_num_' . $taskid, 1);
+//至此redis基本的使用到此结束！
