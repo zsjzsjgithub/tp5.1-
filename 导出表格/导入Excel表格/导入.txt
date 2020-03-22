@@ -1,0 +1,101 @@
+/**
+     * Excel文件上传
+     * @param $file
+     * @return array
+     */
+    public function fileUpload($file)
+    {
+        if (empty($file)) return Response::invalidParam('请选择要导入的Excel表');
+        $res = $this->uploadData->uploadOne($file);
+        if ($res['errcode'] == 1) return Response::fail($res['msg']);
+        return Response::success('上传成功', ['file_path' => $res['result']]);
+    }
+
+    /**
+     * 导入Excel表
+     * @param $file_path
+     * @return array
+     * @throws \Exception
+     */
+    public function importExcel($file_path)
+    {
+        if (empty($file_path)) return Response::invalidParam('请选择需要导入的excel表格');
+        $data = $this->excel->importExcel($file_path);
+        unset($data[1]);
+        $updates = [];
+        $inserts = [];
+        foreach ($data as $v) {
+            $name = $v['A'];
+            $phone = $v['B'];
+            $idcard = $v['C'];
+            $address = $v['D'];
+            $company = $v['E'];
+            $animal_heat = $v['F'];
+            $remark = $v['G'];
+            //   $=$v['H'];
+            // $=$v['I'];
+            $create_time = $v['J'];
+            $code = $v['K'];
+            $res = $this->getZaccount($code, $name, $phone, $address, $idcard, $animal_heat, $company, $remark, $create_time);
+            if (!$res) continue;
+            if ($res['type'] == 1) {
+                //更新数据
+                $updates[] = $res['data'];
+            } else {
+                //插入数据
+                $inserts[] = $res['data'];
+            }
+        }
+        if (count($updates) > 0) $this->registerData->saveAll($updates);
+        if (count($inserts) > 0) $this->registerData->insertAll($inserts);
+        if (count($updates) == 0 && count($inserts) == 0) return Response::fail('暂无数据可导入');
+        return Response::success('数据导入成功');
+    }
+
+    /**
+     * Excel表中的数据组合
+     * @param $code
+     * @param $name
+     * @param $phone
+     * @param $address
+     * @param $idcard
+     * @param $animal_heat
+     * @param $company
+     * @param $remark
+     * @param $create_time
+     * @return array|bool
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
+    public function getZaccount($code, $name, $phone, $address, $idcard, $animal_heat, $company, $remark, $create_time)
+    {
+        $where['is_del'] = CommonEnum::$undeleted;
+        $where['code'] = $code;
+        $zaccount = $this->zaccountData->getByWhere($where, ['id', 'sub_branch_id', 'branch_id']);
+        if (!$zaccount) return false;
+        $zacount_id = $zaccount['id'];
+        $sub_branch_id = $zaccount['sub_branch_id'];
+        $branch_id = $zaccount['branch_id'];
+        //查看该用户是否有登记信息
+        $where_user['is_del'] = CommonEnum::$undeleted;
+        $where_user['idcard'] = $idcard;
+        $register = $this->registerData->getByWhere($where_user, ['id']);
+        if ($register) {
+            $update['id'] = $register['id'];
+            $update['animal_heat'] = $animal_heat;
+            return ['type' => 1, 'data' => $update];
+        } else {
+            $insert['zacount_id'] = $zacount_id;
+            $insert['sub_branch_id'] = $sub_branch_id;
+            $insert['branch_id'] = $branch_id;
+            $insert['name'] = $name;
+            $insert['phone'] = $phone;
+            $insert['address'] = $address;
+            $insert['idcard'] = $idcard;
+            $insert['animal_heat'] = $animal_heat;
+            $insert['company'] = $company;
+            $insert['remark'] = $remark;
+            $insert['create_time'] = $create_time;
+            return ['type' => 2, 'data' => $insert];
+        }
